@@ -3,17 +3,34 @@ namespace AwesomeGICBank.Domain.Services;
 using AwesomeGICBank.Domain.Entities;
 using AwesomeGICBank.Domain.Enums;
 
+/// <summary>
+/// Handles logic for validating and adding transactions.
+/// </summary>
 public class TransactionService(Bank bank)
 {
     private readonly Bank _bank = bank;
     private const decimal MaxDepositAmount = 999999999.99m; // Move this values to to a config file
 
+    /// <summary>
+    /// Validate and add transaction to the given account.
+    /// </summary>
+    /// <param name="accountId"></param>
+    /// <param name="date"></param>
+    /// <param name="typeChar"></param>
+    /// <param name="amount"></param>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     public void AddTransaction(
         string accountId, 
         DateTime date, 
         char typeChar, 
         decimal amount)
     {
+        // It is better to have valid text for accountId.
+        // Therefore this doesn't allow empty text, but skip adding constrains for max legth to keep simple.
+        if  (string.IsNullOrWhiteSpace(accountId))
+            throw new ArgumentException("Please provide valid account id.");
+
         // Parse and validate transaction type
         // Type is D for deposit, W for withdrawal, case insensitive
         var type = typeChar switch

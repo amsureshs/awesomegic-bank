@@ -1,7 +1,4 @@
-using System;
-using Xunit;
 using AwesomeGICBank.Domain.Services;
-using AwesomeGICBank.Domain.Entities;
 using AwesomeGICBank.Domain.Enums;
 
 namespace AwesomeGICBank.Tests.Services;
@@ -73,6 +70,21 @@ public class TransactionServiceTests
             service.AddTransaction("AC004", date, 'W', 20.00m));
 
         Assert.Contains("Insufficient balance", ex.Message);
+    }
+
+    [Fact]
+    public void AddTransaction_Invalid_AccountId_Empty_Text_Should_Fail()
+    {
+        // Arrange
+        var bank = new Bank();
+        var service = new TransactionService(bank);
+        var date = DateTime.Today;
+
+        // Act & Assert
+        var ex = Assert.Throws<ArgumentException>(() =>
+            service.AddTransaction("", date, 'D', 20.00m));
+
+        Assert.Contains("provide valid account", ex.Message);
     }
 
     [Fact]
