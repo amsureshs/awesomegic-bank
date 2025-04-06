@@ -55,6 +55,37 @@ public class BankTests
         Assert.Single(result);
         Assert.Equal(transaction, result[0]);
     }
+
+    [Fact]
+    public void TryGetAccount_Should_Return_True_When_Account_Exists()
+    {
+        // Arrange
+        var bank = new Bank();
+        var createdAccount = bank.GetAccount("AC100");
+
+        // Act
+        var result = bank.TryGetAccount("AC100", out var retrievedAccount);
+
+        // Assert
+        Assert.True(result);
+        Assert.NotNull(retrievedAccount);
+        Assert.Equal(createdAccount.AccountId, retrievedAccount!.AccountId);
+    }
+
+    [Fact]
+    public void TryGetAccount_Should_Return_False_When_Account_Does_Not_Exist()
+    {
+        // Arrange
+        var bank = new Bank();
+
+        // Act
+        var result = bank.TryGetAccount("AC100000", out var account);
+
+        // Assert
+        Assert.False(result);
+        Assert.Null(account);
+    }
+
 #endregion
 
 #region Interest Rules

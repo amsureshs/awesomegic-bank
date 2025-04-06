@@ -10,9 +10,9 @@ namespace AwesomeGICBank.Domain.Entities;
 /// 
 /// If go for a large scale systems, transactions may be separated into their own service.
 /// </summary>
-public class BankAccount(string AccountId)
+public class BankAccount(string accountId)
 {
-    public string AccountId { get; set; } = AccountId;
+    public string AccountId { get; set; } = accountId;
 
     private readonly List<Transaction> _transactions = new();
     public IReadOnlyList<Transaction> Transactions => _transactions;

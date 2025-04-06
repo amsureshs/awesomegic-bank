@@ -11,6 +11,7 @@ public class Bank
     private readonly List<InterestRule> _interestRules = new();
 
 #region Bank Accounts and Transactions
+    
     /// <summary>
     /// Retrieves an existing account or creates a new one if it doesn't exist.
     /// </summary>
@@ -23,6 +24,17 @@ public class Bank
         }
 
         return _accounts[accountId];
+    }
+
+    /// <summary>
+    /// Check and get account if it exists.
+    /// </summary>
+    /// <param name="accountId"></param>
+    /// <param name="account"></param>
+    /// <returns></returns>
+    public bool TryGetAccount(string accountId, out BankAccount? account)
+    {
+        return _accounts.TryGetValue(accountId, out account);
     }
 
     /// <summary>
