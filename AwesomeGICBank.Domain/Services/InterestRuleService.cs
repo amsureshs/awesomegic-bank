@@ -45,28 +45,21 @@ public class InterestRuleService(Bank bank)
     /// <exception cref="InvalidOperationException"></exception>
     public List<Transaction> CalculateInterest(string accountId, int year, int month)
     {
-        var isAccountExist = _bank.TryGetAccount(accountId, out var existingAccount);
+        var isAccountExist = _bank.TryGetAccount(accountId, out var account);
         if (!isAccountExist)
             throw new InvalidOperationException("Bank account not found for the given accountId.");
 
-        var account = existingAccount!;
         var upToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+        var monthStart = new DateTime(year, month, 1);
 
-        // when there is no any transaction for the given month
-        var monthStartDate = new DateTime(year, month,1);
-        var monthlyTransactionsCount = account.Transactions
-            .Where(t => t.Date >= monthStartDate && t.Date <= upToDate)
-            .Count();
-        if (monthlyTransactionsCount == 0)
-            return new List<Transaction>();
-
-        var originalTransactions = account.Transactions
+        var originalTransactions = account!.Transactions
             .Where(t => t.Date <= upToDate)
             .OrderBy(t => t.Date)
             .ThenBy(t => t.TxnId)
             .ToList();
 
-        if (originalTransactions.Count == 0)
+        // when there is no any transaction for the given month return empty result
+        if (!originalTransactions.Any(t => t.Date >= monthStart && t.Date <= upToDate))
             return new List<Transaction>();
 
         // Result list: new copy to hold transactions + interest, in correct order
@@ -117,12 +110,8 @@ public class InterestRuleService(Bank bank)
             }
         }
 
-        return result
-            .OrderBy(t => t.Date)
-            .ThenBy(t => t.TxnId)
-            .ToList();
+        return result;
     }
-
 
     /// <summary>
     /// Returns all currently defined interest rules from the Bank.
