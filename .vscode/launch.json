@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Launch Console App",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/AwesomeGICBank/bin/Debug/net8.0/AwesomeGICBank.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/AwesomeGICBank",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}
